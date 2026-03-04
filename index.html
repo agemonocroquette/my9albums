@@ -1,137 +1,204 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MY 9 ALBUMS.</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY 9 ALBUMS.</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 
 <body>
+<div id="capture">
+  <h1>MY 9 ALBUMS.</h1>
+  <p class="subtitle">The nine that made me.</p>
+  <button id="saveBtn">DOWNLOAD</button>
+  <button id="previewBtn">PREVIEW</button>
+  <button id="shareBtn" style="display:none;">SHARE ON X</button>
 
- <div id="capture">
-
-    <h1>MY 9 ALBUMS.</h1>
-    <p class="subtitle">The nine that made me.</p>
-    <button id="saveBtn">DOWNLOAD</button>
-    <button id="shareBtn" style="display:none;">SHARE ON X</button>
-
-<div class="grid">
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
+  <div id="spotifyDemo" style="text-align:center; margin-bottom:20px;">
+    <input type="text" id="albumInput" placeholder="アルバム名を入力">
+    <button id="searchBtn">検索</button>
+    <br>
   </div>
 
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
+  <div id="searchResults" style="display:flex; gap:10px; flex-wrap: wrap; justify-content: center; margin-top:10px;"></div>
 
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
-  </div>
-
-  <div class="card">
-    <label class="item">
-      <input type="file" accept="image/*">
-    </label>
-    <input class="title" type="text" placeholder="Album title">
+  <div class="grid">
+    <!-- 9枚のカード -->
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
   </div>
 </div>
 
+<div id="previewModal" style="display:none;">
+  <div class="previewContent">
+    <canvas id="previewCanvas"></canvas>
+    <button id="closePreview">CLOSE</button>
   </div>
+</div>
 
 <script>
-  const shareBtn = document.getElementById("shareBtn");
-  const inputs = document.querySelectorAll("input[type='file']");
+document.addEventListener("DOMContentLoaded", () => {
   const saveBtn = document.getElementById("saveBtn");
+  const previewBtn = document.getElementById("previewBtn");
+  const search = document.getElementById("albumInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const resultsDiv = document.getElementById("searchResults");
+  const cards = document.querySelectorAll(".grid .card");
+  const token = "BQDyYN5PgW_Dalo6JYFrCcgc7vIi5m0F5CY7DjNah2_ih9ybiY0o84rvNSUqyPivilITnIhU10pY96HiGKaEyCKvcyGtMRVPphMEZ-N6Wr43zNwyWykov6qUdnX3ZvLhEsQjiL43iPM";
 
-  inputs.forEach(input => {
-    input.addEventListener("change", function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          input.parentElement.style.backgroundImage = `url(${e.target.result})`;
-          input.parentElement.style.backgroundSize = "cover";
-          input.parentElement.style.backgroundPosition = "center";
-        }
-        reader.readAsDataURL(file);
+  // --- ファイル選択で手動追加 ---
+  cards.forEach(card => {
+    const input = card.querySelector("input[type='file']");
+    const img = card.querySelector("img");
+    const plus = card.querySelector(".plus");
+    const item = card.querySelector(".item");
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        img.src = e.target.result;
+        item.classList.remove("empty");
+        if (plus) plus.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Spotify検索（サーバー経由）
+  searchBtn.addEventListener("click", async () => {
+    const albumName = search.value.trim();
+    if (!albumName) return alert("アルバム名を入力してください");
+
+    const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}`);
+const data = await res.json();
+
+    resultsDiv.innerHTML = "";
+    if (!data.albums.items.length) return alert("アルバムが見つかりませんでした");
+
+    data.albums.items.forEach(album => {
+      const container = document.createElement("div");
+      container.style.cursor = "pointer";
+      container.style.margin = "4px";
+      const img = document.createElement("img");
+      img.src = album.images[0].url;
+      img.style.width = "100px";
+      img.style.height = "100px";
+      container.appendChild(img);
+      resultsDiv.appendChild(container);
+
+      container.addEventListener("click", () => {
+        let targetCard = Array.from(cards).find(c => !c.querySelector("img").src);
+        if (!targetCard) targetCard = cards[cards.length - 1];
+        targetCard.querySelector("img").src = img.src;
+        const titleDiv = targetCard.querySelector(".title");
+        titleDiv.textContent = `${album.name} - ${album.artists.map(a=>a.name).join(", ")}`;
+        targetCard.querySelector(".item").classList.remove("empty");
+        const plus = targetCard.querySelector(".plus");
+        if (plus) plus.style.display = "none";
+      });
+    });
+  });
+
+  // --- ドラッグ＆ドロップ ---
+  const cardsContainer = document.querySelector(".grid");
+  let draggedCard = null;
+  cardsContainer.querySelectorAll(".card").forEach(card => {
+    card.setAttribute("draggable", true);
+
+    card.addEventListener("dragstart", () => {
+      draggedCard = card;
+      card.style.opacity = "0.5";
+    });
+
+    card.addEventListener("dragend", () => {
+      draggedCard = null;
+      card.style.opacity = "1";
+    });
+
+    card.addEventListener("dragover", e => {
+      e.preventDefault();
+      card.style.border = "2px dashed #1DB954";
+    });
+
+    card.addEventListener("dragleave", () => {
+      card.style.border = "none";
+    });
+
+    card.addEventListener("drop", e => {
+      e.preventDefault();
+      card.style.border = "none";
+      if (draggedCard && draggedCard !== card) {
+        const cardsArray = Array.from(cardsContainer.children);
+        const draggedIndex = cardsArray.indexOf(draggedCard);
+        const targetIndex = cardsArray.indexOf(card);
+        if (draggedIndex < targetIndex) card.after(draggedCard);
+        else card.before(draggedCard);
       }
     });
   });
 
+  // --- ダウンロード ---
   saveBtn.addEventListener("click", () => {
-  saveBtn.style.display = "none";
+    search.style.display = "none";
+    searchBtn.style.display = "none";
+    resultsDiv.style.display = "none";
+    saveBtn.style.display = "none";
+    previewBtn.style.display = "none";
 
-  html2canvas(document.querySelector("#capture")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "my9albums.png";
-    link.href = canvas.toDataURL();
-    link.click();
+    html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "my9albums.png";
+      link.href = canvas.toDataURL();
+      link.click();
+      search.style.display = "inline-block";
+      searchBtn.style.display = "inline-block";
+      resultsDiv.style.display = "flex";
+      saveBtn.style.display = "inline-block";
+      previewBtn.style.display = "inline-block";
+    });
+  });
 
-    saveBtn.style.display = "inline-block";
-    shareBtn.style.display = "inline-block"; // ← 追加
+  // --- プレビュー ---
+  const previewModal = document.getElementById("previewModal");
+  const previewCanvas = document.getElementById("previewCanvas");
+  const closePreview = document.getElementById("closePreview");
+
+  previewBtn.addEventListener("click", () => {
+    search.style.display = "none";
+    searchBtn.style.display = "none";
+    resultsDiv.style.display = "none";
+    saveBtn.style.display = "none";
+    previewBtn.style.display = "none";
+
+    html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+      previewCanvas.width = canvas.width;
+      previewCanvas.height = canvas.height;
+      const ctx = previewCanvas.getContext("2d");
+      ctx.drawImage(canvas, 0, 0);
+      previewModal.style.display = "flex";
+      search.style.display = "inline-block";
+      searchBtn.style.display = "inline-block";
+      resultsDiv.style.display = "flex";
+      saveBtn.style.display = "inline-block";
+      previewBtn.style.display = "inline-block";
+    });
+  });
+
+  closePreview.addEventListener("click", () => {
+    previewModal.style.display = "none";
   });
 });
-
-shareBtn.addEventListener("click", () => {
-  const text = encodeURIComponent(
-    `These are the 9 albums that made me 🎧
-
-Create yours here ↓
-${SITE_URL}
-
-#MY9ALBUMS`
-  );
-  const url = "https://twitter.com/intent/tweet?text=" + text;
-  window.open(url, "_blank");
-});
-
 </script>
 </body>
 </html>
