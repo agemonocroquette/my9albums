@@ -132,33 +132,30 @@ else if (mode === "track") items = data.tracks.items;
 else if (mode === "artist") items = data.artists.items;
     if (!items || items.length === 0) return alert(`${mode === 'album' ? 'アルバム' : '曲'}が見つかりませんでした`);
 
-    items.forEach(item => {
-      const container = document.createElement("div");
-      container.style.cursor = "pointer";
-      container.style.margin = "6px";
-      container.style.textAlign = "center";
+items.forEach(item => {
+  const container = document.createElement("div");
 
-      const img = document.createElement("img");
-      // アルバムなら images[0].url, トラックなら album.images[0].url
-      img.src = mode === "album" ? item.images[0].url : (item.album?.images[0]?.url || "");
-      img.style.width = "100px";
-      img.style.height = "100px";
-      img.style.display = "block";
+  const img = document.createElement("img");
+  img.src = mode === "artist" ? (item.images?.[0]?.url || "default_artist.png")
+                              : (mode === "album" ? item.images[0].url : item.album?.images[0]?.url || "");
+  img.style.width = "100px";
+  img.style.height = "100px";
 
-      const title = document.createElement("div");
-      title.textContent = mode === "album" ? item.name : item.name;
-      title.style.fontSize = "12px";
-      title.style.fontWeight = "bold";
+  const title = document.createElement("div");
+  title.textContent = item.name;
 
-      const artist = document.createElement("div");
-      artist.textContent = item.artists.map(a => a.name).join(", ");
-      artist.style.fontSize = "11px";
-      artist.style.color = "#666";
+  const artistDiv = document.createElement("div");
+  if (mode !== "artist") {
+    artistDiv.textContent = item.artists.map(a => a.name).join(", ");
+    artistDiv.style.fontSize = "11px";
+    artistDiv.style.color = "#666";
+  }
 
-      container.appendChild(img);
-      container.appendChild(title);
-      container.appendChild(artist);
-      resultsDiv.appendChild(container);
+  container.appendChild(img);
+  container.appendChild(title);
+  if (mode !== "artist") container.appendChild(artistDiv);
+
+  resultsDiv.appendChild(container);
 
       container.addEventListener("click", () => {
         let targetCard = Array.from(cards).find(c => c.querySelector(".item").classList.contains("empty"));
@@ -167,10 +164,11 @@ else if (mode === "artist") items = data.artists.items;
           replaceIndex = (replaceIndex + 1) % cards.length;
         }
         targetCard.querySelector("img").src = img.src;
-        targetCard.querySelector(".title").textContent =
-          mode === "album"
-            ? `${item.name} - ${item.artists.map(a => a.name).join(", ")}`
-            : `${item.name} - ${item.artists.map(a => a.name).join(", ")}`;
+        if (mode === "artist") {
+  targetCard.querySelector(".title").textContent = item.name;
+} else {
+  targetCard.querySelector(".title").textContent = `${item.name} - ${item.artists.map(a => a.name).join(", ")}`;
+}
         targetCard.querySelector(".item").classList.remove("empty");
         const plus = targetCard.querySelector(".plus");
         if (plus) plus.style.display = "none";
