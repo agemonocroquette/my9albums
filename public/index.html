@@ -25,15 +25,15 @@
 
   <div class="grid">
     <!-- 9枚のカード -->
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove">×</button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
   </div>
 </div>
 
@@ -54,19 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".grid .card");
   let replaceIndex = 0;
   const shareBtn = document.getElementById("shareBtn");
-// --- カード削除機能 ---
-cards.forEach(card => {
+// --- 削除ボタン ---
+document.querySelectorAll(".remove").forEach(btn => {
 
-  const title = card.querySelector(".title")
-  const img = card.querySelector("img")
-  const item = card.querySelector(".item")
-  const plus = card.querySelector(".plus")
+  btn.addEventListener("click", () => {
 
-  const removeCard = () => {
+    const card = btn.closest(".card")
 
-    if(!img.src) return
-
-    if(!confirm("このアルバムを削除しますか？")) return
+    const img = card.querySelector("img")
+    const title = card.querySelector(".title")
+    const item = card.querySelector(".item")
+    const plus = card.querySelector(".plus")
 
     img.src = ""
     title.textContent = ""
@@ -74,20 +72,7 @@ cards.forEach(card => {
     item.classList.add("empty")
 
     if(plus) plus.style.display = "block"
-  }
 
-  // PC ダブルクリック
-  card.addEventListener("dblclick", removeCard)
-
-  // スマホ 長押し
-  let pressTimer
-
-  card.addEventListener("touchstart", () => {
-    pressTimer = setTimeout(removeCard, 700)
-  })
-
-  card.addEventListener("touchend", () => {
-    clearTimeout(pressTimer)
   })
 
 })
