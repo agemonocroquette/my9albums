@@ -124,7 +124,7 @@ container.appendChild(artist);
 resultsDiv.appendChild(container);
 
         container.addEventListener("click", () => {
-          let targetCard = Array.from(cards).find(c => !c.querySelector("img").src);
+          let targetCard = Array.from(cards).find(c => c.querySelector(".item").classList.contains("empty"));
 
 if (!targetCard) {
   targetCard = cards[replaceIndex];
