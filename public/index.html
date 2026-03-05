@@ -79,11 +79,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!albumName) return alert("アルバム名を入力してください");
 
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}`)
+      const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}`);
+if (!res.ok) {
+  throw new Error("API error");
+}
       const data = await res.json();
 
-      resultsDiv.innerHTML = "";
-      if (!data.albums.items.length) return alert("アルバムが見つかりませんでした");
+resultsDiv.innerHTML = "";
+
+if (!data.albums || !data.albums.items || data.albums.items.length === 0) {
+  alert("アルバムが見つかりませんでした");
+  return;
+}
 
       data.albums.items.forEach(album => {
         const container = document.createElement("div");
