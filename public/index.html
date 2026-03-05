@@ -187,10 +187,27 @@ if (!targetCard) {
      shareBtn.style.display = "none";
 
     html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
-      const link = document.createElement("a");
-      link.download = "my9albums.png";
-      link.href = canvas.toDataURL();
-      link.click();
+
+  const image = canvas.toDataURL("image/png")
+
+  if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+
+    // スマホ → 新しいタブで表示
+    const newTab = window.open()
+    newTab.document.body.innerHTML =
+      `<img src="${image}" style="width:100%">`
+
+  } else {
+
+    // PC → そのままダウンロード
+    const link = document.createElement("a")
+    link.download = "my9albums.png"
+    link.href = image
+    link.click()
+
+  }
+
+
       shareBtn.style.display = "inline-block";
       search.style.display = "inline-block";
       searchBtn.style.display = "inline-block";
