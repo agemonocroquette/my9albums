@@ -2,15 +2,15 @@ export default async function handler(req, res) {
 
   const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
   const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-
-  const query = req.query.q;
+  const id = req.query.id;
 
   try {
 
     const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
       method: "POST",
       headers: {
-        "Authorization": "Basic " + Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
+        "Authorization":
+          "Basic " + Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
         "Content-Type": "application/x-www-form-urlencoded"
       },
       body: "grant_type=client_credentials"
@@ -18,7 +18,8 @@ export default async function handler(req, res) {
 
     const tokenData = await tokenRes.json();
 
-    const searchRes = await fetch(`/api/search?q=${encodeURIComponent(albumName)}`)
+    const albumRes = await fetch(
+      `https://api.spotify.com/v1/albums/${id}`,
       {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await searchRes.json();
+    const data = await albumRes.json();
 
     res.status(200).json(data);
 
