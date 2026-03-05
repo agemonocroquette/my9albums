@@ -54,28 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".grid .card");
   let replaceIndex = 0;
   const shareBtn = document.getElementById("shareBtn");
-// --- 削除ボタン ---
-document.querySelectorAll(".remove").forEach(btn => {
 
-  btn.addEventListener("click", () => {
-
-    const card = btn.closest(".card")
-
-    const img = card.querySelector("img")
-    const title = card.querySelector(".title")
-    const item = card.querySelector(".item")
-    const plus = card.querySelector(".plus")
-
-    img.src = ""
-    title.textContent = ""
-
-    item.classList.add("empty")
-
-    if(plus) plus.style.display = "block"
-
-  })
-
-})
   // --- ファイル選択で手動追加 ---
   cards.forEach(card => {
     const input = card.querySelector("input[type='file']");
@@ -277,6 +256,29 @@ shareBtn.addEventListener("click", () => {
   closePreview.addEventListener("click", () => {
     previewModal.style.display = "none";
   });
+
+  // --- 削除ボタン ---
+document.querySelectorAll(".remove").forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    const card = btn.closest(".card")
+
+    const img = card.querySelector("img")
+    const title = card.querySelector(".title")
+    const item = card.querySelector(".item")
+    const plus = card.querySelector(".plus")
+
+    img.src = ""
+    title.textContent = ""
+
+    item.classList.add("empty")
+
+    if(plus) plus.style.display = "block"
+
+  })
+
+})
 
 });
 
