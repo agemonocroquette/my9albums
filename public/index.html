@@ -232,32 +232,7 @@ shareBtn.addEventListener("click", () => {
   closePreview.addEventListener("click", () => {
     previewModal.style.display = "none";
   });
-  const params=new URLSearchParams(window.location.search)
-const albums=params.get("albums")
 
-if(albums){
-
-const ids=albums.split(",")
-
-ids.forEach(async(id,index)=>{
-
-const res=await fetch(`/api/search?q=${id}`)
-const data=await res.json()
-
-const album=data.albums.items[0]
-
-const card=cards[index]
-
-card.querySelector("img").src=album.images[0].url
-
-card.querySelector(".title").textContent=
-`${album.name} - ${album.artists.map(a=>a.name).join(", ")}`
-
-card.querySelector(".item").classList.remove("empty")
-
-})
-
-}
 });
 
 
