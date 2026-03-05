@@ -61,38 +61,6 @@ button:hover {
   min-width: 0;
 }
 
-.card{
-position:relative;
-}
-
-.card {
-  position: relative; /* 削除ボタンの基準になる */
-}
-
-.remove {
-  position: absolute;
-  top: -20px;
-  right: 4px;
-  width: 12px;
-  height: 12px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  font-size: 10px;
-  cursor: pointer;
-  z-index: 10;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-}
-
-.remove:hover {
-  background: rgba(0,0,0,0.9);
-}
 /* 画像枠 */
 .item {
   background-color: #ddd;
@@ -216,4 +184,32 @@ body, html {
 
 .contact:hover{
   color:#1DB954;
+}
+
+.mode-switch{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.mode-switch button.active {
+  background: oklab(0% 0 0) !important;
+  color: white !important;
+}
+
+.mode-switch button:not(.active):hover {
+  background: #ddd !important;
+  color: #555 !important;
+}
+
+.mode-switch button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  background: #eee !important;  /* 非アクティブ */
+  color: #888 !important;
+  transition: 0.2s;
 }
