@@ -218,14 +218,31 @@ body, html {
   color:#1DB954;
 }
 
-#searchResults div {
-  width: 110px;
-  text-align: center;
+#searchResults > div {
+  width: 90px;      /* 100px → 90pxで少し小さく */
+  margin: 4px;      /* 6px → 4pxでギュッと */
 }
 
-#searchResults div img {
-  width: 100%;
-  height: auto;
-  max-width: 100px; /* 最大でも100px */
-  border-radius: 8px;
+#searchResults img {
+  width: 90px;      /* 画像も縮める */
+  height: 90px;
+}
+
+.mode-switch button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  /* 非アクティブ状態 */
+  background: #eee;    
+  color: #888;        
+  transition: 0.2s;    
+}
+  /* アクティブ状態 */ 
+.mode-switch button.active {
+  background: #000000; 
+  color: white;
 }

@@ -11,6 +11,11 @@
 <div id="capture">
   <h1>MY 9 ALBUMS.</h1>
   <p class="subtitle">The nine that made me.</p>
+
+  <div class="mode-switch">
+  <button id="modeAlbum" class="active">ALBUM</button>
+  <button id="modeTrack">TRACK</button>
+</div>
   <button id="saveBtn">DOWNLOAD</button>
   <button id="previewBtn">PREVIEW</button>
   <button id="shareBtn" style="display:none;">SHARE ON X</button>
@@ -45,6 +50,21 @@
 </div>
 
 <script>
+
+ let mode = "album"; // 初期はアルバム
+
+document.getElementById("modeAlbum").addEventListener("click", () => {
+  mode = "album";
+  document.getElementById("modeAlbum").classList.add("active");
+  document.getElementById("modeTrack").classList.remove("active");
+});
+
+document.getElementById("modeTrack").addEventListener("click", () => {
+  mode = "track";
+  document.getElementById("modeTrack").classList.add("active");
+  document.getElementById("modeAlbum").classList.remove("active");
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const saveBtn = document.getElementById("saveBtn");
   const previewBtn = document.getElementById("previewBtn");
@@ -81,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!albumName) return alert("アルバム名を入力してください");
 
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}`);
+      const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}&type=${mode}`);
 if (!res.ok) {
   throw new Error("API error");
 }

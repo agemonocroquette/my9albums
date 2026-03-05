@@ -8,6 +8,7 @@ export default async function handler(req, res) {
   const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
   const query = req.query.q;
+  const type = req.query.type || "album";
 
   try {
 
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
     const tokenData = await tokenRes.json();
 
     const searchRes = await fetch(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=album&limit=5`,
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=${type}&limit=6`,
       {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`
