@@ -175,3 +175,13 @@ body, html {
   display: inline-block; 
 }
 
+.contact{
+  text-decoration:none;
+  font-size:20px;
+  color:#888;
+  transition:0.2s;
+}
+
+.contact:hover{
+  color:#1DB954;
+}
