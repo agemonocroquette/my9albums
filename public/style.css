@@ -67,21 +67,19 @@ position:relative;
 
 .remove{
 position:absolute;
-top:5px;
-right:5px;
+top:6px;
+right:6px;
 width:24px;
 height:24px;
 border:none;
 border-radius:50%;
-background:black;
+background:rgba(0,0,0,0.6);
 color:white;
-font-size:16px;
+font-size:14px;
 cursor:pointer;
-display:none;
-}
-
-.card:hover .remove{
-display:block;
+z-index:10;
+line-height:24px;
+text-align:center;
 }
 
 /* 画像枠 */
