@@ -15,6 +15,7 @@
   <div class="mode-switch">
   <button id="modeAlbum" class="active">ALBUM</button>
   <button id="modeTrack">TRACK</button>
+  <button id="modeArtist">ARTIST</button>
 </div>
   <button id="saveBtn">DOWNLOAD</button>
   <button id="previewBtn">PREVIEW</button>
@@ -54,7 +55,9 @@
 const headerTitle = document.querySelector("#capture h1");
 document.getElementById("modeAlbum").addEventListener("click", () => { headerTitle.textContent = "MY 9 ALBUMS."; });
 document.getElementById("modeTrack").addEventListener("click", () => { headerTitle.textContent = "MY 9 TRACKS."; });
+document.getElementById("modeArtist").addEventListener("click", () => { headerTitle.textContent = "MY 9 ARTISTS."; });
 
+const modeOptions = ["album", "track", "artist"];
 let mode = "album"; // 初期はアルバム
 
 document.getElementById("modeAlbum").addEventListener("click", () => {
@@ -69,6 +72,16 @@ document.getElementById("modeTrack").addEventListener("click", () => {
   document.getElementById("modeTrack").classList.add("active");
   document.getElementById("modeAlbum").classList.remove("active");
   search.placeholder = "曲名を入力";
+});
+
+document.getElementById("modeArtist").addEventListener("click", () => {
+  mode = "artist";
+  document.getElementById("modeArtist").classList.add("active");
+  document.getElementById("modeAlbum").classList.remove("active");
+  document.getElementById("modeTrack").classList.remove("active");
+
+  headerTitle.textContent = "MY 9 ARTISTS";
+  search.placeholder = "アーティスト名を入力";
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -113,7 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = await res.json();
     resultsDiv.innerHTML = "";
 
-    let items = mode === "album" ? data.albums.items : data.tracks.items;
+    let items;
+if (mode === "album") items = data.albums.items;
+else if (mode === "track") items = data.tracks.items;
+else if (mode === "artist") items = data.artists.items;
     if (!items || items.length === 0) return alert(`${mode === 'album' ? 'アルバム' : '曲'}が見つかりませんでした`);
 
     items.forEach(item => {

@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
   const query = req.query.q;
-  const type = req.query.type || "album";
+const type = req.query.type || "album"; // album/track/artist
 
   try {
 
