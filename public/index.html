@@ -124,19 +124,26 @@ container.appendChild(artist);
 resultsDiv.appendChild(container);
 
         container.addEventListener("click", () => {
-          let targetCard = Array.from(cards).find(c => !c.querySelector("img").src);
 
-if (!targetCard) {
-  targetCard = cards[replaceIndex];
-  replaceIndex = (replaceIndex + 1) % cards.length;
-}
-          targetCard.querySelector("img").src = img.src;
-          const titleDiv = targetCard.querySelector(".title");
-          titleDiv.textContent = `${album.name} - ${album.artists.map(a => a.name).join(", ")}`;
-          targetCard.querySelector(".item").classList.remove("empty");
-          const plus = targetCard.querySelector(".plus");
-          if (plus) plus.style.display = "none";
-        });
+  let targetCard = Array.from(cards).find(c => !c.querySelector("img").src)
+
+  if (!targetCard) {
+    targetCard = cards[replaceIndex]
+    replaceIndex = (replaceIndex + 1) % cards.length
+  }
+
+  targetCard.dataset.albumId = album.id   // ★追加
+
+  targetCard.querySelector("img").src = img.src
+
+  const titleDiv = targetCard.querySelector(".title")
+
+  titleDiv.textContent =
+  `${album.name} - ${album.artists.map(a => a.name).join(", ")}`
+
+  targetCard.querySelector(".item").classList.remove("empty")
+
+})
       });
     } catch (err) {
       console.error(err);
@@ -199,10 +206,28 @@ if (!targetCard) {
     });
   });
 shareBtn.addEventListener("click", () => {
-  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums");
-  const url = encodeURIComponent(window.location.href);
-  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
-});
+
+  const ids = []
+
+  cards.forEach(card => {
+
+    const id = card.dataset.albumId
+
+    if(id) ids.push(id)
+
+  })
+
+  const shareURL =
+  window.location.origin + "?albums=" + ids.join(",")
+
+  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums")
+
+  window.open(
+  `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareURL)}`,
+  "_blank"
+  )
+
+})
   // --- プレビュー ---
   const previewModal = document.getElementById("previewModal");
   const previewCanvas = document.getElementById("previewCanvas");
