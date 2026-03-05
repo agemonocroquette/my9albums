@@ -124,26 +124,19 @@ container.appendChild(artist);
 resultsDiv.appendChild(container);
 
         container.addEventListener("click", () => {
+          let targetCard = Array.from(cards).find(c => !c.querySelector("img").src);
 
-  let targetCard = Array.from(cards).find(c => !c.querySelector("img").src)
-
-  if (!targetCard) {
-    targetCard = cards[replaceIndex]
-    replaceIndex = (replaceIndex + 1) % cards.length
-  }
-
-  targetCard.dataset.albumId = album.id   // ★追加
-
-  targetCard.querySelector("img").src = img.src
-
-  const titleDiv = targetCard.querySelector(".title")
-
-  titleDiv.textContent =
-  `${album.name} - ${album.artists.map(a => a.name).join(", ")}`
-
-  targetCard.querySelector(".item").classList.remove("empty")
-
-})
+if (!targetCard) {
+  targetCard = cards[replaceIndex];
+  replaceIndex = (replaceIndex + 1) % cards.length;
+}
+          targetCard.querySelector("img").src = img.src;
+          const titleDiv = targetCard.querySelector(".title");
+          titleDiv.textContent = `${album.name} - ${album.artists.map(a => a.name).join(", ")}`;
+          targetCard.querySelector(".item").classList.remove("empty");
+          const plus = targetCard.querySelector(".plus");
+          if (plus) plus.style.display = "none";
+        });
       });
     } catch (err) {
       console.error(err);
@@ -206,28 +199,10 @@ resultsDiv.appendChild(container);
     });
   });
 shareBtn.addEventListener("click", () => {
-
-  const ids = []
-
-  cards.forEach(card => {
-
-    const id = card.dataset.albumId
-
-    if(id) ids.push(id)
-
-  })
-
-  const shareURL =
-  window.location.origin + "?albums=" + ids.join(",")
-
-  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums")
-
-  window.open(
-  `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareURL)}`,
-  "_blank"
-  )
-
-})
+  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums");
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
+});
   // --- プレビュー ---
   const previewModal = document.getElementById("previewModal");
   const previewCanvas = document.getElementById("previewCanvas");
@@ -257,24 +232,26 @@ shareBtn.addEventListener("click", () => {
   closePreview.addEventListener("click", () => {
     previewModal.style.display = "none";
   });
- const params = new URLSearchParams(window.location.search)
-const albums = params.get("albums")
+  const params=new URLSearchParams(window.location.search)
+const albums=params.get("albums")
 
-if (albums) {
+if(albums){
 
-const ids = albums.split(",")
+const ids=albums.split(",")
 
-ids.forEach(async (id, index) => {
+ids.forEach(async(id,index)=>{
 
-const res = await fetch(`/api/album?id=${id}`)
-const album = await res.json()
+const res=await fetch(`/api/search?q=${id}`)
+const data=await res.json()
 
-const card = cards[index]
+const album=data.albums.items[0]
 
-card.querySelector("img").src = album.images[0].url
+const card=cards[index]
 
-card.querySelector(".title").textContent =
-`${album.name} - ${album.artists.map(a => a.name).join(", ")}`
+card.querySelector("img").src=album.images[0].url
+
+card.querySelector(".title").textContent=
+`${album.name} - ${album.artists.map(a=>a.name).join(", ")}`
 
 card.querySelector(".item").classList.remove("empty")
 
