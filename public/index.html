@@ -95,14 +95,32 @@ if (!data.albums || !data.albums.items || data.albums.items.length === 0) {
 
       data.albums.items.forEach(album => {
         const container = document.createElement("div");
-        container.style.cursor = "pointer";
-        container.style.margin = "4px";
-        const img = document.createElement("img");
-        img.src = album.images[0].url;
-        img.style.width = "100px";
-        img.style.height = "100px";
-        container.appendChild(img);
-        resultsDiv.appendChild(container);
+container.style.cursor = "pointer";
+container.style.margin = "6px";
+container.style.width = "110px";
+container.style.textAlign = "center";
+
+const img = document.createElement("img");
+img.src = album.images[0].url;
+img.style.width = "100px";
+img.style.height = "100px";
+img.style.display = "block";
+
+const title = document.createElement("div");
+title.textContent = album.name;
+title.style.fontSize = "12px";
+title.style.fontWeight = "bold";
+
+const artist = document.createElement("div");
+artist.textContent = album.artists.map(a => a.name).join(", ");
+artist.style.fontSize = "11px";
+artist.style.color = "#666";
+
+container.appendChild(img);
+container.appendChild(title);
+container.appendChild(artist);
+
+resultsDiv.appendChild(container);
 
         container.addEventListener("click", () => {
           let targetCard = Array.from(cards).find(c => !c.querySelector("img").src);
