@@ -186,20 +186,23 @@ if (!targetCard) {
     previewBtn.style.display = "none";
      shareBtn.style.display = "none";
 
-    html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
 
   const image = canvas.toDataURL("image/png")
 
   if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
 
-    // スマホ → 新しいタブで表示
-    const newTab = window.open()
-    newTab.document.body.innerHTML =
-      `<img src="${image}" style="width:100%">`
+    // スマホ → 画像ページに切り替え
+    document.body.innerHTML = `
+      <div style="text-align:center;padding:20px;font-family:sans-serif">
+        <p>長押しして画像を保存してください</p>
+        <img src="${image}" style="width:100%;max-width:600px;">
+      </div>
+    `
 
   } else {
 
-    // PC → そのままダウンロード
+    // PC
     const link = document.createElement("a")
     link.download = "my9albums.png"
     link.href = image
@@ -207,14 +210,14 @@ if (!targetCard) {
 
   }
 
+  shareBtn.style.display = "inline-block";
+  search.style.display = "inline-block";
+  searchBtn.style.display = "inline-block";
+  resultsDiv.style.display = "flex";
+  saveBtn.style.display = "inline-block";
+  previewBtn.style.display = "inline-block";
 
-      shareBtn.style.display = "inline-block";
-      search.style.display = "inline-block";
-      searchBtn.style.display = "inline-block";
-      resultsDiv.style.display = "flex";
-      saveBtn.style.display = "inline-block";
-      previewBtn.style.display = "inline-block";
-    });
+});
   });
 shareBtn.addEventListener("click", () => {
   const text = encodeURIComponent("My 9 Albums 🎧 #my9albums");
