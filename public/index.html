@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultsDiv = document.getElementById("searchResults");
   const cards = document.querySelectorAll(".grid .card");
   let replaceIndex = 0;
+  const shareBtn = document.getElementById("shareBtn");
 
   // --- ファイル選択で手動追加 ---
   cards.forEach(card => {
@@ -189,6 +190,7 @@ if (!targetCard) {
       link.download = "my9albums.png";
       link.href = canvas.toDataURL();
       link.click();
+      shareBtn.style.display = "inline-block";
       search.style.display = "inline-block";
       searchBtn.style.display = "inline-block";
       resultsDiv.style.display = "flex";
@@ -196,7 +198,11 @@ if (!targetCard) {
       previewBtn.style.display = "inline-block";
     });
   });
-
+shareBtn.addEventListener("click", () => {
+  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums");
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
+});
   // --- プレビュー ---
   const previewModal = document.getElementById("previewModal");
   const previewCanvas = document.getElementById("previewCanvas");
