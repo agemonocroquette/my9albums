@@ -51,38 +51,31 @@
 </div>
 
 <script>
+ document.addEventListener("DOMContentLoaded", () => {
   const search = document.getElementById("albumInput");
-const headerTitle = document.querySelector("#capture h1");
-document.getElementById("modeAlbum").addEventListener("click", () => { headerTitle.textContent = "MY 9 ALBUMS."; });
-document.getElementById("modeTrack").addEventListener("click", () => { headerTitle.textContent = "MY 9 TRACKS."; });
-document.getElementById("modeArtist").addEventListener("click", () => { headerTitle.textContent = "MY 9 ARTISTS."; });
+  const headerTitle = document.querySelector("#capture h1");
+  const footerCopyright = document.getElementById("footerCopyright");
 
+  document.getElementById("modeAlbum").addEventListener("click", () => {
+    headerTitle.textContent = "MY 9 ALBUMS.";
+    search.placeholder = "アルバム名を入力";
+    footerCopyright.textContent = "© 2026 MY 9 ALBUMS.";
+  });
+
+  document.getElementById("modeTrack").addEventListener("click", () => {
+    headerTitle.textContent = "MY 9 TRACKS.";
+    search.placeholder = "曲名を入力";
+    footerCopyright.textContent = "© 2026 MY 9 TRACKS.";
+  });
+
+  document.getElementById("modeArtist").addEventListener("click", () => {
+    headerTitle.textContent = "MY 9 ARTISTS.";
+    search.placeholder = "アーティスト名を入力";
+    footerCopyright.textContent = "© 2026 MY 9 ARTISTS.";
+  });
+});
 const modeOptions = ["album", "track", "artist"];
 let mode = "album"; // 初期はアルバム
-
-document.getElementById("modeAlbum").addEventListener("click", () => {
-  mode = "album";
-  document.getElementById("modeAlbum").classList.add("active");
-  document.getElementById("modeTrack").classList.remove("active");
-  search.placeholder = "アルバム名を入力";
-});
-
-document.getElementById("modeTrack").addEventListener("click", () => {
-  mode = "track";
-  document.getElementById("modeTrack").classList.add("active");
-  document.getElementById("modeAlbum").classList.remove("active");
-  search.placeholder = "曲名を入力";
-});
-
-document.getElementById("modeArtist").addEventListener("click", () => {
-  mode = "artist";
-  document.getElementById("modeArtist").classList.add("active");
-  document.getElementById("modeAlbum").classList.remove("active");
-  document.getElementById("modeTrack").classList.remove("active");
-
-  headerTitle.textContent = "MY 9 ARTISTS";
-  search.placeholder = "アーティスト名を入力";
-});
 
 document.addEventListener("DOMContentLoaded", () => {
   const saveBtn = document.getElementById("saveBtn");
@@ -337,7 +330,7 @@ document.querySelectorAll(".remove").forEach(btn => {
 
 </script>
 <footer class="footer">
-<p>© 2026 MY 9 ALBUMS.</p>
+<p id="footerCopyright">© 2026 MY 9 ALBUMS.</p>
 
 <p>
 <a href="privacy.html">Privacy Policy</a> |
