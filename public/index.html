@@ -31,15 +31,15 @@
 
   <div class="grid">
     <!-- 9枚のカード -->
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
-    <div class="card"><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
+    <div class="card"><button class="remove"></button><label class="item empty"><input type="file" accept="image/*"><img><span class="plus">+</span></label><div class="title" contenteditable="true"></div></div>
   </div>
 </div>
 
@@ -94,7 +94,28 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.readAsDataURL(file);
     });
   });
+// --- 削除ボタン ---
+document.querySelectorAll(".remove").forEach(btn => {
 
+  btn.addEventListener("click", () => {
+
+    const card = btn.closest(".card")
+
+    const img = card.querySelector("img")
+    const title = card.querySelector(".title")
+    const item = card.querySelector(".item")
+    const plus = card.querySelector(".plus")
+
+    img.src = ""
+    title.textContent = ""
+
+    item.classList.add("empty")
+
+    if(plus) plus.style.display = "block"
+
+  })
+
+})
   // --- Spotify検索（サーバー経由） ---
   searchBtn.addEventListener("click", async () => {
     const albumName = search.value.trim();

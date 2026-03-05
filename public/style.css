@@ -61,6 +61,39 @@ button:hover {
   min-width: 0;
 }
 
+.card{
+position:relative;
+}
+
+.card {
+  position: relative; /* 削除ボタンの基準になる */
+}
+
+.remove {
+  position: absolute;
+  top: -20px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 10px;
+  cursor: pointer;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.remove:hover {
+  background: rgba(0,0,0,0.9);
+}
+
 /* 画像枠 */
 .item {
   background-color: #ddd;
@@ -212,4 +245,16 @@ body, html {
   background: #eee !important;  /* 非アクティブ */
   color: #888 !important;
   transition: 0.2s;
+}
+
+#searchResults div {
+  width: 110px;
+  text-align: center;
+}
+
+#searchResults div img {
+  width: 100%;
+  height: auto;
+  max-width: 100px; /* 最大でも100px */
+  border-radius: 8px;
 }
