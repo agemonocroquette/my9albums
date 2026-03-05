@@ -93,7 +93,6 @@ position:relative;
 .remove:hover {
   background: rgba(0,0,0,0.9);
 }
-
 /* 画像枠 */
 .item {
   background-color: #ddd;
@@ -219,40 +218,14 @@ body, html {
   color:#1DB954;
 }
 
-.mode-switch{
-  text-align:center;
-  margin-bottom:15px;
+#searchResults div {
+  width: 110px;
+  text-align: center;
 }
 
-.mode-switch button.active {
-  background: oklab(0% 0 0) !important;
-  color: white !important;
-}
-
-.mode-switch button:not(.active):hover {
-  background: #ddd !important;
-  color: #555 !important;
-}
-
-.mode-switch button {
-  padding: 8px 16px;
-  margin: 0 5px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-
-  background: #eee !important;  /* 非アクティブ */
-  color: #888 !important;
-  transition: 0.2s;
-}
-
-#searchResults > div {
-  width: 90px;      /* 100px → 90pxで少し小さく */
-  margin: 4px;      /* 6px → 4pxでギュッと */
-}
-
-#searchResults img {
-  width: 90px;      /* 画像も縮める */
-  height: 90px;
+#searchResults div img {
+  width: 100%;
+  height: auto;
+  max-width: 100px; /* 最大でも100px */
+  border-radius: 8px;
 }
