@@ -196,85 +196,101 @@ if (!targetCard) {
     });
   });
 
-  // --- ダウンロード ---
-  saveBtn.addEventListener("click", () => {
-    search.style.display = "none";
-    searchBtn.style.display = "none";
-    resultsDiv.style.display = "none";
-    saveBtn.style.display = "none";
-    previewBtn.style.display = "none";
-     shareBtn.style.display = "none";
+  // DOMContentLoaded の中の処理に追加・修正
 
-html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+// UI要素の表示/非表示を切り替えるヘルパー関数
+const toggleUIPanels = (show) => {
+    const displayValue = show ? "inline-block" : "none";
+    const resultsDisplayValue = show ? "flex" : "none"; // resultsDiv は flex
 
-  const image = canvas.toDataURL("image/png")
+    search.style.display = displayValue;
+    searchBtn.style.display = displayValue;
+    resultsDiv.style.display = resultsDisplayValue;
+    saveBtn.style.display = displayValue;
+    previewBtn.style.display = displayValue;
+    // shareBtn はダウンロード後に表示されるべきなので、ここでは制御しない
+    // モード切り替えボタンも
+    document.getElementById("modeAlbum").style.display = displayValue;
+    document.getElementById("modeTrack").style.display = displayValue;
+};
 
-  if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
-
-    // スマホ → 画像ページに切り替え
-    document.body.innerHTML = `
-      <div style="text-align:center;padding:20px;font-family:sans-serif">
-        <p style="font-size:14px;line-height:1.6;">
-長押しして画像を保存してください<br>
-<span style="color:#666;">Press and hold the image to save</span>
-</p>
-        <img src="${image}" style="width:100%;max-width:600px;">
-      </div>
-    `
-
-  } else {
-
-    // PC
-    const link = document.createElement("a")
-    link.download = "my9albums.png"
-    link.href = image
-    link.click()
-
-  }
-
-  shareBtn.style.display = "inline-block";
-  search.style.display = "inline-block";
-  searchBtn.style.display = "inline-block";
-  resultsDiv.style.display = "flex";
-  saveBtn.style.display = "inline-block";
-  previewBtn.style.display = "inline-block";
-
-});
-  });
-shareBtn.addEventListener("click", () => {
-  const text = encodeURIComponent("My 9 Albums 🎧 #my9albums");
-  const url = encodeURIComponent(window.location.href);
-  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
-});
-  // --- プレビュー ---
-  const previewModal = document.getElementById("previewModal");
-  const previewCanvas = document.getElementById("previewCanvas");
-  const closePreview = document.getElementById("closePreview");
-
-  previewBtn.addEventListener("click", () => {
-    search.style.display = "none";
-    searchBtn.style.display = "none";
-    resultsDiv.style.display = "none";
-    saveBtn.style.display = "none";
-    previewBtn.style.display = "none";
+// --- ダウンロード ---
+saveBtn.addEventListener("click", () => {
+    toggleUIPanels(false); // UIを非表示にする
 
     html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
-      previewCanvas.width = canvas.width;
-      previewCanvas.height = canvas.height;
-      const ctx = previewCanvas.getContext("2d");
-      ctx.drawImage(canvas, 0, 0);
-      previewModal.style.display = "flex";
-      search.style.display = "inline-block";
-      searchBtn.style.display = "inline-block";
-      resultsDiv.style.display = "flex";
-      saveBtn.style.display = "inline-block";
-      previewBtn.style.display = "inline-block";
-    });
-  });
+        const image = canvas.toDataURL("image/png");
 
-  closePreview.addEventListener("click", () => {
+        if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+            // スマホの場合: プレビューモーダルを再利用して画像を提示
+            previewCanvas.width = canvas.width;
+            previewCanvas.height = canvas.height;
+            const ctx = previewCanvas.getContext("2d");
+            ctx.drawImage(canvas, 0, 0);
+
+            // 保存指示文をモーダルに追加または表示
+            let instructionP = document.getElementById("saveInstruction"); // 新しいID
+            if (!instructionP) {
+                instructionP = document.createElement("p");
+                instructionP.id = "saveInstruction";
+                instructionP.style.fontSize = "14px";
+                instructionP.style.lineHeight = "1.6";
+                instructionP.style.margin = "10px 0";
+                instructionP.innerHTML = `
+                    長押しして画像を保存してください<br>
+                    <span style="color:#666;">Press and hold the image to save</span>
+                `;
+                // previewContent に追加。closePreviewボタンの前が自然
+                previewModal.querySelector(".previewContent").insertBefore(instructionP, closePreview);
+            }
+            instructionP.style.display = 'block'; // 常に表示
+
+            previewModal.style.display = "flex"; // モーダルを表示
+
+            // モーダルが閉じられたときにUIを再表示するロジックは closePreview のイベントリスナーに任せる
+            // ダウンロード後の shareBtn の表示も、モーダルが閉じられたときに考慮するのが適切
+        } else {
+            // PCの場合
+            const link = document.createElement("a");
+            link.download = "my9albums.png";
+            link.href = image;
+            link.click();
+            toggleUIPanels(true); // UIを再表示
+            shareBtn.style.display = "inline-block"; // ダウンロード後なのでシェアボタンも表示
+        }
+    });
+});
+
+// --- プレビュー ---
+previewBtn.addEventListener("click", () => {
+    toggleUIPanels(false); // UIを非表示にする
+
+    html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+        previewCanvas.width = canvas.width;
+        previewCanvas.height = canvas.height;
+        const ctx = previewCanvas.getContext("2d");
+        ctx.drawImage(canvas, 0, 0);
+
+        // もし保存指示文があるなら非表示にする（プレビュー時は不要）
+        const instructionP = document.getElementById("saveInstruction");
+        if (instructionP) instructionP.style.display = 'none';
+
+        previewModal.style.display = "flex"; // モーダルを表示
+        // プレビュー表示後もUIはモーダルを閉じるときに再表示されるように
+    });
+});
+
+// --- プレビュー/ダウンロードモーダルを閉じる ---
+closePreview.addEventListener("click", () => {
     previewModal.style.display = "none";
-  });
+    // UIを再表示
+    toggleUIPanels(true);
+    // モーダルを閉じた後にシェアボタンを表示するかどうかは、ダウンロードからの流れであれば表示。
+    // プレビューだけなら表示しない。
+    // ここでは、もしダウンロード処理でモーダルを使った場合にも対応できるよう、
+    // シェアボタンは常にここで表示する方針とする
+    shareBtn.style.display = "inline-block";
+});
 
   // --- 削除ボタン ---
 document.querySelectorAll(".remove").forEach(btn => {
