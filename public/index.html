@@ -51,31 +51,45 @@
 </div>
 
 <script>
+const modeOptions = ["album", "track", "artist"];
+let mode = "album"; // 初期はアルバム
  document.addEventListener("DOMContentLoaded", () => {
   const search = document.getElementById("albumInput");
   const headerTitle = document.querySelector("#capture h1");
   const footerCopyright = document.getElementById("footerCopyright");
 
-  document.getElementById("modeAlbum").addEventListener("click", () => {
-    headerTitle.textContent = "MY 9 ALBUMS.";
-    search.placeholder = "アルバム名を入力";
-    footerCopyright.textContent = "© 2026 MY 9 ALBUMS.";
-  });
+const modeButtons = document.querySelectorAll(".mode-switch button");
 
-  document.getElementById("modeTrack").addEventListener("click", () => {
-    headerTitle.textContent = "MY 9 TRACKS.";
-    search.placeholder = "曲名を入力";
-    footerCopyright.textContent = "© 2026 MY 9 TRACKS.";
-  });
+function setActiveMode(selectedMode) {
+  modeButtons.forEach(btn => btn.classList.remove("active"));
+  document.getElementById(`mode${selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1)}`).classList.add("active");
+}
 
-  document.getElementById("modeArtist").addEventListener("click", () => {
-    headerTitle.textContent = "MY 9 ARTISTS.";
-    search.placeholder = "アーティスト名を入力";
-    footerCopyright.textContent = "© 2026 MY 9 ARTISTS.";
-  });
+document.getElementById("modeAlbum").addEventListener("click", () => {
+  mode = "album";
+  setActiveMode(mode);
+  headerTitle.textContent = "MY 9 ALBUMS.";
+  search.placeholder = "アルバム名を入力";
+  footerCopyright.textContent = "© 2026 MY 9 ALBUMS.";
 });
-const modeOptions = ["album", "track", "artist"];
-let mode = "album"; // 初期はアルバム
+
+document.getElementById("modeTrack").addEventListener("click", () => {
+  mode = "track";
+  setActiveMode(mode);
+  headerTitle.textContent = "MY 9 TRACKS.";
+  search.placeholder = "曲名を入力";
+  footerCopyright.textContent = "© 2026 MY 9 TRACKS.";
+});
+
+document.getElementById("modeArtist").addEventListener("click", () => {
+  mode = "artist";
+  setActiveMode(mode);
+  headerTitle.textContent = "MY 9 ARTISTS.";
+  search.placeholder = "アーティスト名を入力";
+  footerCopyright.textContent = "© 2026 MY 9 ARTISTS.";
+});
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const saveBtn = document.getElementById("saveBtn");
