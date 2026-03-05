@@ -60,6 +60,26 @@ let mode = "album"; // 初期はアルバム
 
 const modeButtons = document.querySelectorAll(".mode-switch button");
 
+const shareBtn = document.getElementById("shareBtn");
+
+shareBtn.addEventListener("click", () => {
+  const cards = document.querySelectorAll(".grid .card");
+  const top3Titles = Array.from(cards)
+    .map(c => c.querySelector(".title").textContent)
+    .filter(t => t)          // 空タイトルは無視
+    .slice(0, 3);            // 上位3つだけ
+
+  if (top3Titles.length === 0) return alert("カードにタイトルがありません");
+
+  const text = encodeURIComponent(
+    `My 9 ${modeOptions.find(m => m === mode)?.toUpperCase()}🎧 #my9music\n` +
+    top3Titles.map((t, i) => `${i + 1}. ${t}`).join("\n")
+  );
+  const url = encodeURIComponent(window.location.href);
+  const xShareUrl = `https://x.com/intent/tweet?text=${text}&url=${url}`;
+  window.open(xShareUrl, "_blank");
+});
+
 function setActiveMode(selectedMode) {
   modeButtons.forEach(btn => btn.classList.remove("active"));
   document.getElementById(`mode${selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1)}`).classList.add("active");
