@@ -50,19 +50,25 @@
 </div>
 
 <script>
+  const search = document.getElementById("albumInput");
+const headerTitle = document.querySelector("#capture h1");
+document.getElementById("modeAlbum").addEventListener("click", () => { headerTitle.textContent = "MY 9 ALBUMS."; });
+document.getElementById("modeTrack").addEventListener("click", () => { headerTitle.textContent = "MY 9 TRACKS."; });
 
- let mode = "album"; // 初期はアルバム
+let mode = "album"; // 初期はアルバム
 
 document.getElementById("modeAlbum").addEventListener("click", () => {
   mode = "album";
   document.getElementById("modeAlbum").classList.add("active");
   document.getElementById("modeTrack").classList.remove("active");
+  search.placeholder = "アルバム名を入力";
 });
 
 document.getElementById("modeTrack").addEventListener("click", () => {
   mode = "track";
   document.getElementById("modeTrack").classList.add("active");
   document.getElementById("modeAlbum").classList.remove("active");
+  search.placeholder = "曲名を入力";
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -96,72 +102,69 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- Spotify検索（サーバー経由） ---
-  searchBtn.addEventListener("click", async () => {
-    const albumName = search.value.trim();
-    if (!albumName) return alert("アルバム名を入力してください");
+ searchBtn.addEventListener("click", async () => {
+  const queryText = search.value.trim();
+  if (!queryText) return alert(`${mode === 'album' ? 'アルバム' : '曲'}名を入力してください`);
 
-    try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(albumName)}&type=${mode}`);
-if (!res.ok) {
-  throw new Error("API error");
-}
-      const data = await res.json();
+  try {
+    const res = await fetch(`/api/search?q=${encodeURIComponent(queryText)}&type=${mode}`);
+    if (!res.ok) throw new Error("API error");
 
-resultsDiv.innerHTML = "";
+    const data = await res.json();
+    resultsDiv.innerHTML = "";
 
-if (!data.albums || !data.albums.items || data.albums.items.length === 0) {
-  alert("アルバムが見つかりませんでした");
-  return;
-}
+    let items = mode === "album" ? data.albums.items : data.tracks.items;
+    if (!items || items.length === 0) return alert(`${mode === 'album' ? 'アルバム' : '曲'}が見つかりませんでした`);
 
-      data.albums.items.forEach(album => {
-        const container = document.createElement("div");
-container.style.cursor = "pointer";
-container.style.margin = "6px";
-container.style.textAlign = "center";
+    items.forEach(item => {
+      const container = document.createElement("div");
+      container.style.cursor = "pointer";
+      container.style.margin = "6px";
+      container.style.textAlign = "center";
 
-const img = document.createElement("img");
-img.src = album.images[0].url;
-img.style.width = "100px";
-img.style.height = "100px";
-img.style.display = "block";
+      const img = document.createElement("img");
+      // アルバムなら images[0].url, トラックなら album.images[0].url
+      img.src = mode === "album" ? item.images[0].url : (item.album?.images[0]?.url || "");
+      img.style.width = "100px";
+      img.style.height = "100px";
+      img.style.display = "block";
 
-const title = document.createElement("div");
-title.textContent = album.name;
-title.style.fontSize = "12px";
-title.style.fontWeight = "bold";
+      const title = document.createElement("div");
+      title.textContent = mode === "album" ? item.name : item.name;
+      title.style.fontSize = "12px";
+      title.style.fontWeight = "bold";
 
-const artist = document.createElement("div");
-artist.textContent = album.artists.map(a => a.name).join(", ");
-artist.style.fontSize = "11px";
-artist.style.color = "#666";
+      const artist = document.createElement("div");
+      artist.textContent = item.artists.map(a => a.name).join(", ");
+      artist.style.fontSize = "11px";
+      artist.style.color = "#666";
 
-container.appendChild(img);
-container.appendChild(title);
-container.appendChild(artist);
+      container.appendChild(img);
+      container.appendChild(title);
+      container.appendChild(artist);
+      resultsDiv.appendChild(container);
 
-resultsDiv.appendChild(container);
-
-        container.addEventListener("click", () => {
-          let targetCard = Array.from(cards).find(c => c.querySelector(".item").classList.contains("empty"));
-
-if (!targetCard) {
-  targetCard = cards[replaceIndex];
-  replaceIndex = (replaceIndex + 1) % cards.length;
-}
-          targetCard.querySelector("img").src = img.src;
-          const titleDiv = targetCard.querySelector(".title");
-          titleDiv.textContent = `${album.name} - ${album.artists.map(a => a.name).join(", ")}`;
-          targetCard.querySelector(".item").classList.remove("empty");
-          const plus = targetCard.querySelector(".plus");
-          if (plus) plus.style.display = "none";
-        });
+      container.addEventListener("click", () => {
+        let targetCard = Array.from(cards).find(c => c.querySelector(".item").classList.contains("empty"));
+        if (!targetCard) {
+          targetCard = cards[replaceIndex];
+          replaceIndex = (replaceIndex + 1) % cards.length;
+        }
+        targetCard.querySelector("img").src = img.src;
+        targetCard.querySelector(".title").textContent =
+          mode === "album"
+            ? `${item.name} - ${item.artists.map(a => a.name).join(", ")}`
+            : `${item.name} - ${item.artists.map(a => a.name).join(", ")}`;
+        targetCard.querySelector(".item").classList.remove("empty");
+        const plus = targetCard.querySelector(".plus");
+        if (plus) plus.style.display = "none";
       });
-    } catch (err) {
-      console.error(err);
-      alert("Spotify APIへの接続に失敗しました");
-    }
-  });
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Spotify APIへの接続に失敗しました");
+  }
+});
 
   // --- ドラッグ＆ドロップ ---
   const cardsContainer = document.querySelector(".grid");
