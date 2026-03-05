@@ -195,7 +195,10 @@ html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => 
     // スマホ → 画像ページに切り替え
     document.body.innerHTML = `
       <div style="text-align:center;padding:20px;font-family:sans-serif">
-        <p>長押しして画像を保存してください</p>
+        <p style="font-size:14px;line-height:1.6;">
+長押しして画像を保存してください<br>
+<span style="color:#666;">Press and hold the image to save</span>
+</p>
         <img src="${image}" style="width:100%;max-width:600px;">
       </div>
     `
@@ -255,7 +258,18 @@ shareBtn.addEventListener("click", () => {
   });
 
 });
+const cards = document.querySelectorAll(".card .item");
 
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    if(card.style.backgroundImage) {
+      // 確認ダイアログ
+      if(confirm("削除しますか？")) {
+        card.style.backgroundImage = "";
+      }
+    }
+  });
+});
 
 </script>
 <footer class="footer">
