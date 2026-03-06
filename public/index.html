@@ -259,6 +259,7 @@ const toggleUIPanels = (show) => {
     // モード切り替えボタンも
     document.getElementById("modeAlbum").style.display = displayValue;
     document.getElementById("modeTrack").style.display = displayValue;
+    document.getElementById("modeArtist").style.display = displayValue;
 };
 
 // --- ダウンロード ---
@@ -274,7 +275,7 @@ saveBtn.addEventListener("click", () => {
 
     if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
 
-  const newTab = window.open();
+  const newTab = window.open("", "_blank");
 
   newTab.document.write(`
     <html>
@@ -346,21 +347,7 @@ previewBtn.addEventListener("click", () => {
 
         previewModal.style.display = "flex"; // モーダルを表示
         // プレビュー表示後もUIはモーダルを閉じるときに再表示されるように
-    });
-});
-
-// --- プレビュー/ダウンロードモーダルを閉じる ---
-closePreview.addEventListener("click", () => {
-
-  previewModal.style.display = "none";
-
-  toggleUIPanels(true);
-
-  previewModal.addEventListener("click", (e) => {
-  if (e.target === previewModal) {
-    previewModal.style.display = "none";
-    toggleUIPanels(true);
-  }
+    
 });
 
 
