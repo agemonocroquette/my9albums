@@ -274,45 +274,47 @@ saveBtn.addEventListener("click", () => {
 
     if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
 
-      // スマホ → imgで表示
-      previewCanvas.style.display = "none";
+  const newTab = window.open();
 
-      let previewImg = document.getElementById("previewImage");
+  newTab.document.write(`
+    <html>
+    <head>
+      <title>Preview</title>
+      <style>
+        body{
+          margin:0;
+          background:#111;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          height:100vh;
+          flex-direction:column;
+          font-family:sans-serif;
+          color:white;
+        }
+        img{
+          max-width:95vw;
+          height:auto;
+          border-radius:10px;
+        }
+        p{
+          margin-top:15px;
+          font-size:14px;
+          opacity:0.8;
+        }
+      </style>
+    </head>
+    <body>
+      <img src="${image}">
+      <p>長押しして画像を保存<br>Press and hold the image to save</p>
+    </body>
+    </html>
+  `);
 
-      if (!previewImg) {
-        previewImg = document.createElement("img");
-        previewImg.id = "previewImage";
-        previewImg.style.width = "100%";
-previewImg.style.maxWidth = "420px";
-previewImg.style.height = "auto";
-previewImg.style.display = "block";
-previewImg.style.margin = "0 auto";
-        previewImg.style.borderRadius = "8px";
+  newTab.document.close();
 
-        previewModal.querySelector(".previewContent").prepend(previewImg);
-      }
+  toggleUIPanels(true);
 
-      previewImg.src = image;
-
-      // 保存説明
-      let instructionP = document.getElementById("saveInstruction");
-
-      if (!instructionP) {
-        instructionP = document.createElement("p");
-        instructionP.id = "saveInstruction";
-        instructionP.style.fontSize = "14px";
-        instructionP.style.margin = "10px 0";
-        instructionP.innerHTML = `
-        長押しして画像を保存してください<br>
-        <span style="color:#666;">Press and hold the image to save</span>
-        `;
-
-        previewModal.querySelector(".previewContent").insertBefore(instructionP, closePreview);
-      }
-
-      instructionP.style.display = "block";
-
-      previewModal.style.display = "flex";
 
     } else {
 
