@@ -280,9 +280,8 @@ body, html {
 
 /* 検索結果カード */
 #searchResults .resultCard{
-  width: 95px;          /* カード幅を小さく */
-  font-size: 11px;      /* 文字を少し小さく */
-  text-align: center;
+  width:95px;
+  flex-shrink:0;
 }
 
 /* アルバム画像 */
@@ -309,4 +308,5 @@ body, html {
   gap:8px;
   overflow-x:auto;
   padding-bottom:6px;
+  flex-wrap:nowrap;
 }
