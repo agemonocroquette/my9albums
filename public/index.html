@@ -264,6 +264,16 @@ const toggleUIPanels = (show) => {
 
 // --- ダウンロード ---
 saveBtn.addEventListener("click", () => {
+
+  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+
+  let newTab = null;
+
+  // スマホの場合は先にタブを開く（ポップアップブロック防止）
+  if (isMobile) {
+    newTab = window.open("", "_blank");
+  }
+
   toggleUIPanels(false);
 
   html2canvas(document.querySelector("#capture"), {
@@ -273,64 +283,64 @@ saveBtn.addEventListener("click", () => {
 
     const image = canvas.toDataURL("image/png");
 
-    if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+    if (isMobile) {
 
-  const newTab = window.open("", "_blank");
+      // スマホ → 新しいタブに画像表示
+      newTab.document.write(`
+        <html>
+        <head>
+          <title>Preview</title>
+          <style>
+            body{
+              margin:0;
+              background:#111;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              height:100vh;
+              flex-direction:column;
+              font-family:sans-serif;
+              color:white;
+            }
+            img{
+              max-width:95vw;
+              height:auto;
+              border-radius:10px;
+            }
+            p{
+              margin-top:15px;
+              font-size:14px;
+              opacity:0.8;
+              text-align:center;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${image}">
+          <p>長押しして画像を保存<br>Press and hold the image to save</p>
+        </body>
+        </html>
+      `);
 
-  newTab.document.write(`
-    <html>
-    <head>
-      <title>Preview</title>
-      <style>
-        body{
-          margin:0;
-          background:#111;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          height:100vh;
-          flex-direction:column;
-          font-family:sans-serif;
-          color:white;
-        }
-        img{
-          max-width:95vw;
-          height:auto;
-          border-radius:10px;
-        }
-        p{
-          margin-top:15px;
-          font-size:14px;
-          opacity:0.8;
-        }
-      </style>
-    </head>
-    <body>
-      <img src="${image}">
-      <p>長押しして画像を保存<br>Press and hold the image to save</p>
-    </body>
-    </html>
-  `);
-
-  newTab.document.close();
-
-  toggleUIPanels(true);
-
+      newTab.document.close();
 
     } else {
 
-      // PC
+      // PC → ダウンロード
       const link = document.createElement("a");
-      link.download = "my9albums.png";
+      link.download = "my9music.png";
       link.href = image;
       link.click();
 
-      toggleUIPanels(true);
       shareBtn.style.display = "inline-block";
+
     }
+
+    toggleUIPanels(true);
 
   });
 });
+
 // --- プレビュー ---
 previewBtn.addEventListener("click", () => {
     toggleUIPanels(false); // UIを非表示にする
