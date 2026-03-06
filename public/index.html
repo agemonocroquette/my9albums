@@ -282,7 +282,11 @@ saveBtn.addEventListener("click", () => {
       if (!previewImg) {
         previewImg = document.createElement("img");
         previewImg.id = "previewImage";
-        previewImg.style.maxWidth = "100%";
+        previewImg.style.width = "100%";
+previewImg.style.maxWidth = "420px";
+previewImg.style.height = "auto";
+previewImg.style.display = "block";
+previewImg.style.margin = "0 auto";
         previewImg.style.borderRadius = "8px";
 
         previewModal.querySelector(".previewContent").prepend(previewImg);
@@ -345,7 +349,19 @@ previewBtn.addEventListener("click", () => {
 
 // --- プレビュー/ダウンロードモーダルを閉じる ---
 closePreview.addEventListener("click", () => {
+
+  previewModal.style.display = "none";
+
+  toggleUIPanels(true);
+
+  previewModal.addEventListener("click", (e) => {
+  if (e.target === previewModal) {
     previewModal.style.display = "none";
+    toggleUIPanels(true);
+  }
+});
+
+
     // UIを再表示
     toggleUIPanels(true);
     // モーダルを閉じた後にシェアボタンを表示するかどうかは、ダウンロードからの流れであれば表示。
