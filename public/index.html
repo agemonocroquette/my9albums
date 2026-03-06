@@ -276,10 +276,20 @@ saveBtn.addEventListener("click", () => {
 
   toggleUIPanels(false);
 
+  // ×ボタンを非表示
+  document.querySelectorAll(".remove").forEach(btn => {
+    btn.style.display = "none";
+  });
+
   html2canvas(document.querySelector("#capture"), {
     useCORS: true,
     scale: 2
   }).then(canvas => {
+
+    // ×ボタンを戻す
+document.querySelectorAll(".remove").forEach(btn => {
+  btn.style.display = "block";
+});
 
     const image = canvas.toDataURL("image/png");
 
