@@ -61,6 +61,9 @@ let mode = "album"; // 初期はアルバム
 const modeButtons = document.querySelectorAll(".mode-switch button");
 
 const shareBtn = document.getElementById("shareBtn");
+const previewModal = document.getElementById("previewModal");
+const previewCanvas = document.getElementById("previewCanvas");
+const closePreview = document.getElementById("closePreview");
 
 shareBtn.addEventListener("click", () => {
   const cards = document.querySelectorAll(".grid .card");
@@ -262,7 +265,10 @@ const toggleUIPanels = (show) => {
 saveBtn.addEventListener("click", () => {
     toggleUIPanels(false); // UIを非表示にする
 
-    html2canvas(document.querySelector("#capture"), {useCORS: true}).then(canvas => {
+    html2canvas(document.querySelector("#capture"), {
+  useCORS: true,
+  scale: 2
+}).then(canvas => {
         const image = canvas.toDataURL("image/png");
 
         if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
