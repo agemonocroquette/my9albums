@@ -15,6 +15,7 @@ html, body {
 /* タイトル */
 h1 {
   margin-top: 60px;
+  margin-bottom: 4px;
   font-weight: 300;
   letter-spacing: 4px;
   font-size: 28px;
@@ -24,7 +25,7 @@ h1 {
   font-weight: 300;
   color: #888;
   letter-spacing: 1px;
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 /* ボタン */
@@ -47,7 +48,7 @@ button:hover {
 .grid {
   width: 94%;
   max-width: 400px;
-  margin: 40px auto;
+  margin: 20px auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -63,10 +64,6 @@ button:hover {
 
 .card{
 position:relative;
-}
-
-.card {
-  position: relative; /* 削除ボタンの基準になる */
 }
 
 .remove {
@@ -209,7 +206,6 @@ body, html {
 
 .contact{
   text-decoration:none;
-  font-size:20px;
   color:#888;
   transition:0.2s;
 }
@@ -218,17 +214,11 @@ body, html {
   color:#1DB954;
 }
 
-#searchResults > div {
-  width: 90px;      /* 100px → 90pxで少し小さく */
-  margin: 4px;      /* 6px → 4pxでギュッと */
+.mode-switch{
+  margin-top:20px;
 }
-
-#searchResults img {
-  width: 90px;      /* 画像も縮める */
-  height: 90px;
-}
-
 .mode-switch button {
+  margin-top: 14px;
   padding: 8px 16px;
   margin: 0 5px;
   border: none;
@@ -262,4 +252,61 @@ body, html {
 .browserHelp{
   font-size:11px;
   opacity:0.8;
+}
+
+.footer{
+  margin-top:40px;
+  padding:20px 10px;
+  font-size:11px;
+  color:#888;
+  line-height:1.5;
+  opacity:0.8;
+
+}
+
+.footer p{
+  margin:4px 0;
+}
+
+.footer a{
+  color:#888;
+  text-decoration:none;
+  transition:0.2s;
+}
+
+.footer a:hover{
+  color:#1DB954;
+}
+
+/* 検索結果カード */
+#searchResults .resultCard{
+  width: 95px;          /* カード幅を小さく */
+  font-size: 11px;      /* 文字を少し小さく */
+  text-align: center;
+}
+
+/* アルバム画像 */
+#searchResults img{
+  width: 95px;
+  height: 95px;
+  border-radius: 6px;
+}
+
+/* アルバムタイトル */
+#searchResults .albumName{
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+/* アーティスト名 */
+#searchResults .artistName{
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+#searchResults{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:6px;
 }
