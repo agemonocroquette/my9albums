@@ -28,7 +28,7 @@ const type = req.query.type || "album"; // album/track/artist
     const tokenData = await tokenRes.json();
 
     const searchRes = await fetch(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=${type}&limit=6`,
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=${type}&limit=10`,
       {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`
