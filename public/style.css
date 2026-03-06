@@ -46,13 +46,12 @@ button:hover {
 
 /* グリッド */
 .grid {
-  width: 94%;
+  width: 100%;
   max-width: 400px;
   margin: 20px auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  padding-bottom: 20px;
 }
 
 /* カード */
@@ -200,10 +199,9 @@ body, html {
 }
 #capture {
   margin: 0 auto;
-  padding: 10px;  /* 最低限の余白 */
-  display: inline-block; 
+  padding: 10px;
+  max-width: 420px;
 }
-
 .contact{
   text-decoration:none;
   color:#888;
