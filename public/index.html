@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div id="browserWarning" style="display:none;">
 <title>MY 9 ALBUMS.</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -20,7 +21,11 @@
   <button id="saveBtn">DOWNLOAD</button>
   <button id="previewBtn">PREVIEW</button>
   <button id="shareBtn" style="display:none;">SHARE ON X</button>
-
+  <p>
+  Xアプリ内ブラウザでは画像保存ができない場合があります。<br>
+  <b>右上の「…」→「ブラウザで開く」</b>を押してください。
+  </p>
+</div>
   <div id="spotifyDemo" style="text-align:center; margin-bottom:20px;">
     <input type="text" id="albumInput" placeholder="アルバム名を入力">
     <button id="searchBtn">検索</button>
@@ -51,6 +56,9 @@
 </div>
 
 <script>
+  if (navigator.userAgent.includes("Twitter")) {
+  document.getElementById("browserWarning").style.display = "block";
+}
 const modeOptions = ["album", "track", "artist"];
 let mode = "album"; // 初期はアルバム
  document.addEventListener("DOMContentLoaded", () => {
